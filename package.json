@@ -1,0 +1,51 @@
+{
+    "name": "zen-cli",
+    "version": "1.0.0",
+    "description": "",
+    "main": "zen.js",
+    "bin": {
+        "zen": "./zen.js"
+    },
+    "engines": {
+        "node": ">=10.0.0"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "zen"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ReySong/zen-cli.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ReySong/zen-cli/issues"
+    },
+    "homepage": "https://github.com/ReySong/zen-cli#readme",
+    "dependencies": {
+        "chalk": "^4.0.0",
+        "commander": "^9.2.0",
+        "minimist": "^1.2.6",
+        "prettier": "^2.6.2",
+        "semver": "^7.3.7"
+    },
+    "devDependencies": {
+        "eslint": "^8.14.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.0.0",
+        "prettier-eslint": "^14.0.0"
+    },
+    "prettier": {
+        "singleQuote": false,
+        "useTabs": true,
+        "semi": true,
+        "stylelintIntegration": true,
+        "eslintIntegration": true,
+        "insertPragma": false,
+        "trailingComma": "none",
+        "arrowParens": "avoid"
+    }
+}
