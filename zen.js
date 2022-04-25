@@ -11,7 +11,7 @@ const minimist = require("minimist");
 //  node版本强制退出
 function checkNodeVersion(wantedVersion, id) {
     if (!semver.satisfies(process.version, wantedVersion)) {
-        console.log(
+        console.error(
             chalk.red(
                 `You are using Node ${process.version}, but this version of ${id} requires Node ${wantedVersion}.\nPlease upgrade your Node version.\n`
             )
@@ -46,7 +46,7 @@ program.addHelpText(
 
 program
     .version(
-        `v${packageJson.version}\n`,
+        chalk.magenta(`Zen CLI v${packageJson.version}\n`),
         "-v, --version",
         "output the current version"
     )

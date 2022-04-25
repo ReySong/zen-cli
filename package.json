@@ -28,9 +28,12 @@
     "dependencies": {
         "chalk": "^4.0.0",
         "commander": "^9.2.0",
+        "fs-extra": "^10.1.0",
+        "inquirer": "^8.2.2",
         "minimist": "^1.2.6",
         "prettier": "^2.6.2",
-        "semver": "^7.3.7"
+        "semver": "^7.3.7",
+        "validate-npm-package-name": "^4.0.0"
     },
     "devDependencies": {
         "eslint": "^8.14.0",
