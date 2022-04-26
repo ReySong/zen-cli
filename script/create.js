@@ -6,7 +6,7 @@ const validateProjectName = require("validate-npm-package-name");
 
 async function create(projectName, options) {
     const cwd = options.cwd || process.cwd();
-    const name = projectName === "." ? path.relative("../", cwd) : projectName;
+    const name = projectName === "." ? path.relative("../", cwd) : projectName; //  若 app-name 为 "." ，则解析成当前目录
     const appDir = path.resolve(cwd, projectName); //  新建项目的绝对路径
     const result = validateProjectName(name);
     if (!result.validForNewPackages) {
@@ -24,6 +24,23 @@ async function create(projectName, options) {
 
     if (fs.existsSync(appDir)) {
         //  app 路径上已经存在文件
+        if (options.force) {
+            await fs.remove(appDir);
+        } else {
+            console.clear();
+            if (projectName === ".") {
+                const { ok } = await inquirer.prompt([{
+                    name: "ok",
+                    type: "confirm",
+                    message: "Generate a project in current directory?"
+                }]);
+                if (!ok) {
+                    return;
+                }
+            } else {
+
+            }
+        }
     }
 }
 
