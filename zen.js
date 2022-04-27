@@ -34,7 +34,7 @@ program
                 )
             );
         }
-        require("./script/create")(name, options);
+        require("./script/create/create")(name, options);
     });
 
 program.addHelpText(
@@ -46,7 +46,7 @@ program.addHelpText(
 
 program
     .version(
-        chalk.magenta(`Zen CLI v${packageJson.version}\n`),
+        chalk.magenta(`\nZen CLI v${packageJson.version}\n`),
         "-v, --version",
         "output the current version"
     )
