@@ -34,7 +34,7 @@ program
                 )
             );
         }
-        require("./script/create")(name, options);
+        require("./script/create/create")(name, options);
     });
 
 program.addHelpText(

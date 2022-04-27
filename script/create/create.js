@@ -3,6 +3,7 @@ const fs = require("fs-extra");
 const chalk = require("chalk");
 const path = require("path");
 const validateProjectName = require("validate-npm-package-name");
+const config = require("./config/config");
 
 async function create(projectName, options) {
     const cwd = options.cwd || process.cwd();
@@ -25,7 +26,7 @@ async function create(projectName, options) {
     if (fs.existsSync(appDir)) {
         //  app 路径上已经存在文件
         if (options.force) {
-            await fs.remove(appDir);
+            await fs.removeSync(appDir);
         } else {
             console.clear();
             if (projectName === ".") {
@@ -38,10 +39,28 @@ async function create(projectName, options) {
                     return;
                 }
             } else {
-
+                const { action } = await inquirer.prompt([{
+                    name: "action",
+                    type: "list",
+                    message: `Target directory ${chalk.cyan(
+							appDir
+						)} already exists. Pick an action:`,
+                    choices: [
+                        { name: "Overwrite", value: "overwrite" },
+                        { name: "Merge", value: "merge" },
+                        { name: "Cancel", value: false }
+                    ]
+                }]);
+                if (!action) {
+                    return;
+                } else if (action === "overwrite") {
+                    console.log(`\nRemoving ${chalk.cyan(appDir)}...\n`);
+                    await fs.removeSync(appDir);
+                }
             }
         }
     }
+    config(projectName);
 }
 
 module.exports = (...args) => {
