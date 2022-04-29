@@ -3,7 +3,9 @@ const fs = require("fs-extra");
 const chalk = require("chalk");
 const path = require("path");
 const validateProjectName = require("validate-npm-package-name");
+
 const config = require("./config/config");
+const { getPromptModules } = require("../util/createTools");
 
 async function create(projectName, options) {
     const cwd = options.cwd || process.cwd();
@@ -60,7 +62,7 @@ async function create(projectName, options) {
             }
         }
     }
-    config(projectName);
+    config(projectName, getPromptModules());
 }
 
 module.exports = (...args) => {
