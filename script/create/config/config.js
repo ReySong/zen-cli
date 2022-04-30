@@ -8,15 +8,20 @@ class Creator extends EventEmitter {
     constructor(name, PromptModules) {
         super();
         this.name = name;
-        this.options = {};
+        this.options = {
+            framework: "vue"
+        };
         const { presetPrompt } = this.promptPreset();
         const { featurePrompt } = this.promptManual();
         this.presetPrompt = presetPrompt;
         this.featurePrompt = featurePrompt;
-        this.resolvePrompts();
+        this.injectedPrompts = [];
+        this.promptCompleteCbs = [];
 
         const promptAPI = new PromptModuleAPI(this);
-        // PromptModules.forEach(m => m(promptAPI));
+        PromptModules.forEach(m => m(promptAPI));
+
+        this.resolvePrompts();
     }
 
     create() {}
@@ -56,7 +61,6 @@ class Creator extends EventEmitter {
 
     async resolvePrompts() {
         const { preset } = await inquirer.prompt([this.presetPrompt]);
-        console.log(preset);
         this.options.presetOption = preset;
         if (preset !== "__manual__") {
             this.options.presetOption = savedTemplates.get(preset);
