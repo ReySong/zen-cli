@@ -1,18 +1,21 @@
 const inquirer = require("inquirer");
 const EventEmitter = require("events");
+const debug = require("debug");
 
 const { presetChoices, savedTemplates } = require("./preset");
 const PromptModuleAPI = require("../promptModuleAPI");
 
-class Creator extends EventEmitter {
+const isManualMode = answers => answers.preset === "__manual__";
+
+module.exports = class Creator extends EventEmitter {
     constructor(name, PromptModules) {
         super();
         this.name = name;
         this.options = {
             framework: "vue"
         };
-        const { presetPrompt } = this.promptPreset();
-        const { featurePrompt } = this.promptManual();
+        const { presetPrompt } = this.resolvePresetPrompt();
+        const { featurePrompt } = this.resolveManualPrompt();
         this.presetPrompt = presetPrompt;
         this.featurePrompt = featurePrompt;
         this.injectedPrompts = [];
@@ -21,12 +24,12 @@ class Creator extends EventEmitter {
         const promptAPI = new PromptModuleAPI(this);
         PromptModules.forEach(m => m(promptAPI));
 
-        this.resolvePrompts();
+        this.resolvePresetOrPrompts();
     }
 
-    create() {}
+    create(cliOptions = {}, options = null) {}
 
-    promptPreset() {
+    resolvePresetPrompt() {
         const presetPrompt = {
             name: "preset",
             type: "list",
@@ -45,7 +48,7 @@ class Creator extends EventEmitter {
         };
     }
 
-    promptManual() {
+    resolveManualPrompt() {
         const featurePrompt = {
             name: "features",
             type: "checkbox",
@@ -59,19 +62,32 @@ class Creator extends EventEmitter {
         };
     }
 
-    async resolvePrompts() {
-        const { preset } = await inquirer.prompt([this.presetPrompt]);
-        this.options.presetOption = preset;
-        if (preset !== "__manual__") {
-            this.options.presetOption = savedTemplates.get(preset);
-            return;
-        }
-        const { feature } = await inquirer.prompt([this.featurePrompt]);
-        this.options.featureOption = feature;
-    }
-}
+    resolvePreset() {}
 
-module.exports = function config(...args) {
-    const creator = new Creator(...args);
-    return creator.create();
+    resolveFinalPrompts() {
+        // patch generator-injected prompts to only show in manual mode
+        this.injectedPrompts.forEach(prompt => {
+            const originalWhen = prompt.when || (() => true);
+            prompt.when = answers => {
+                return isManualMode(answers) && originalWhen(answers);
+            };
+        });
+
+        const prompts = [
+            this.presetPrompt,
+            this.featurePrompt,
+            ...this.injectedPrompts
+            // ...this.outroPrompts
+        ];
+        debug("zen-cli:prompts")(prompts);
+        return prompts;
+    }
+
+    async resolvePresetOrPrompts(answers = null) {
+        if (!answers) {
+            console.clear();
+            answers = await inquirer.prompt(this.resolveFinalPrompts());
+        }
+        debug("zen-cli:answers")(answers);
+    }
 };

@@ -4,7 +4,7 @@ const chalk = require("chalk");
 const path = require("path");
 const validateProjectName = require("validate-npm-package-name");
 
-const config = require("./config/config");
+const Creator = require("./config/creator");
 const { getPromptModules } = require("../util/createTools");
 
 async function create(projectName, options) {
@@ -62,7 +62,8 @@ async function create(projectName, options) {
             }
         }
     }
-    config(projectName, getPromptModules());
+    const creator = new Creator(projectName, getPromptModules());
+    await creator.create(options);
 }
 
 module.exports = (...args) => {

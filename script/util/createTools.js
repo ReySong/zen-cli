@@ -5,6 +5,7 @@ exports.getPromptModules = () => {
         "pwa",
         "router",
         "vuex",
+        "pinia",
         "cssPreprocessors",
         // "linter",
         "unit",

@@ -8,7 +8,6 @@ module.exports = cli => {
         value: "linter",
         short: "Linter",
         description: "Check and enforce code quality with ESLint or Prettier",
-        link: "https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint",
         plugins: ["eslint"],
         checked: true
     });
@@ -62,7 +61,7 @@ module.exports = cli => {
 
     cli.onPromptComplete((answers, options) => {
         if (answers.features.includes("linter")) {
-            options.plugins["@vue/cli-plugin-eslint"] = {
+            options.plugins["@zen/cli-plugin-eslint"] = {
                 config: answers.eslintConfig,
                 lintOn: answers.lintOn
             };

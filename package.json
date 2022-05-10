@@ -28,6 +28,7 @@
     "dependencies": {
         "chalk": "^4.0.0",
         "commander": "^9.2.0",
+        "debug": "^4.3.4",
         "fs-extra": "^10.1.0",
         "inquirer": "^8.2.2",
         "minimist": "^1.2.6",
